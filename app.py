@@ -30,7 +30,7 @@ st.set_page_config(
 # ─── Constants ────────────────────────────────────────────────────────────────
 
 MAX_COMMENTS_PER_VIDEO = 100
-MAX_VIDEOS = 500000
+MAX_VIDEOS = 500
 REQUEST_DELAY = 0.1
 
 # ─── CSS ──────────────────────────────────────────────────────────────────────
@@ -39,229 +39,219 @@ st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap');
 
-html, body, [class*="css"] {
-    font-family: 'Inter', sans-serif;
-}
+html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
 
-/* Background */
-.stApp {
-    background: #0f0f0f;
-    color: #e8e8e8;
-}
+/* ── App background ── */
+.stApp { background: #f0f2f6; color: #111; }
 
-/* Sidebar */
+/* ── Sidebar ── */
 [data-testid="stSidebar"] {
-    background: #141414 !important;
-    border-right: 1px solid #252525;
+    background: #1a1a2e !important;
+    border-right: none;
+}
+[data-testid="stSidebar"] * { color: #e8e8f0 !important; }
+[data-testid="stSidebar"] .stMarkdown p { color: #aab !important; }
+[data-testid="stSidebar"] input {
+    background: #16213e !important;
+    color: #fff !important;
+    border-color: #0f3460 !important;
+    border-radius: 8px !important;
 }
 
-/* Header */
+/* ── Login card ── */
+.login-wrap {
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    padding: 24px;
+}
+.login-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 48px 44px 40px;
+    width: 100%; max-width: 440px;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.35);
+}
+.login-logo {
+    display: flex; align-items: center; justify-content: center;
+    width: 64px; height: 64px;
+    background: #FF0000;
+    border-radius: 16px;
+    font-size: 30px;
+    margin: 0 auto 20px;
+}
+.login-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 26px; font-weight: 700;
+    color: #111; text-align: center; margin: 0 0 6px;
+}
+.login-sub {
+    font-size: 14px; color: #666;
+    text-align: center; margin: 0 0 32px;
+    line-height: 1.5;
+}
+.login-section-label {
+    font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 1px;
+    color: #999; margin: 20px 0 12px;
+    display: flex; align-items: center; gap: 8px;
+}
+.login-section-label::before,
+.login-section-label::after {
+    content: ""; flex: 1;
+    height: 1px; background: #eee;
+}
+.login-divider {
+    border: none; border-top: 1px solid #eee;
+    margin: 24px 0;
+}
+.security-note {
+    background: #f8f9fc;
+    border: 1px solid #e8eaf0;
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-top: 24px;
+}
+.security-note p {
+    font-size: 12px; color: #888;
+    margin: 0; line-height: 1.8;
+}
+
+/* ── Main app ── */
 .yt-header {
-    display: flex;
-    align-items: center;
-    gap: 14px;
+    display: flex; align-items: center; gap: 14px;
     padding: 28px 0 20px;
-    border-bottom: 1px solid #252525;
+    border-bottom: 2px solid #e0e3ea;
     margin-bottom: 28px;
 }
 .yt-logo {
-    background: #FF0000;
-    border-radius: 8px;
+    background: #FF0000; border-radius: 10px;
     width: 44px; height: 44px;
     display: flex; align-items: center; justify-content: center;
-    font-size: 22px;
-    flex-shrink: 0;
+    font-size: 22px; flex-shrink: 0;
 }
 .yt-title {
     font-family: 'Space Grotesk', sans-serif;
-    font-size: 22px;
-    font-weight: 700;
-    color: #ffffff;
-    margin: 0;
-    letter-spacing: -0.3px;
+    font-size: 22px; font-weight: 700; color: #111;
+    margin: 0; letter-spacing: -0.3px;
 }
-.yt-sub {
-    font-size: 13px;
-    color: #666;
-    margin: 2px 0 0;
-}
+.yt-sub { font-size: 13px; color: #888; margin: 2px 0 0; }
 
-/* Metric cards */
+/* ── Metric cards ── */
 .metric-row {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-    margin: 20px 0;
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 14px; margin: 20px 0;
 }
 .metric-card {
-    background: #181818;
-    border: 1px solid #252525;
-    border-radius: 12px;
-    padding: 18px 20px;
+    background: #ffffff;
+    border: 1px solid #e0e3ea;
+    border-radius: 14px; padding: 20px 22px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 .metric-label {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    color: #555;
-    font-weight: 600;
-    margin-bottom: 6px;
+    font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.8px; color: #999;
+    font-weight: 600; margin-bottom: 8px;
 }
 .metric-value {
     font-family: 'Space Grotesk', sans-serif;
-    font-size: 24px;
-    font-weight: 700;
-    color: #ffffff;
-    line-height: 1;
+    font-size: 26px; font-weight: 700; color: #111; line-height: 1;
 }
-.metric-sub {
-    font-size: 11px;
-    color: #555;
-    margin-top: 4px;
-}
+.metric-sub { font-size: 11px; color: #aaa; margin-top: 5px; }
 
-/* Channel banner */
+/* ── Channel banner ── */
 .channel-banner {
-    background: linear-gradient(135deg, #181818 0%, #1a1a1a 100%);
-    border: 1px solid #252525;
-    border-radius: 14px;
-    padding: 24px 28px;
+    background: #fff;
+    border: 1px solid #e0e3ea;
+    border-radius: 16px; padding: 24px 28px;
     margin-bottom: 24px;
-    display: flex;
-    gap: 20px;
-    align-items: flex-start;
+    display: flex; gap: 20px; align-items: flex-start;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 .channel-thumb {
-    width: 72px; height: 72px;
-    border-radius: 50%;
-    object-fit: cover;
-    flex-shrink: 0;
-    border: 2px solid #FF0000;
+    width: 72px; height: 72px; border-radius: 50%;
+    object-fit: cover; flex-shrink: 0;
+    border: 3px solid #FF0000;
 }
 .channel-name {
     font-family: 'Space Grotesk', sans-serif;
-    font-size: 20px;
-    font-weight: 700;
-    color: #fff;
-    margin: 0 0 4px;
+    font-size: 20px; font-weight: 700; color: #111; margin: 0 0 4px;
 }
-.channel-handle {
-    font-size: 13px;
-    color: #FF4444;
-    margin: 0 0 8px;
-}
-.channel-desc {
-    font-size: 13px;
-    color: #777;
-    line-height: 1.6;
-    max-width: 600px;
-}
+.channel-handle { font-size: 13px; color: #FF0000; margin: 0 0 8px; }
+.channel-desc { font-size: 13px; color: #666; line-height: 1.6; max-width: 600px; }
 
-/* Top video card */
+/* ── Top video card ── */
 .top-video {
-    background: #181818;
-    border: 1px solid #252525;
-    border-radius: 10px;
-    padding: 14px 16px;
-    margin-bottom: 8px;
-    display: flex;
-    gap: 14px;
-    align-items: center;
+    background: #fff; border: 1px solid #e8eaf0;
+    border-radius: 10px; padding: 14px 16px;
+    margin-bottom: 8px; display: flex; gap: 14px; align-items: center;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
 }
 .rank-badge {
     font-family: 'Space Grotesk', sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    color: #FF0000;
-    width: 24px;
-    flex-shrink: 0;
-    text-align: center;
+    font-size: 14px; font-weight: 700; color: #FF0000;
+    width: 28px; flex-shrink: 0; text-align: center;
 }
 .video-title-text {
-    font-size: 13px;
-    font-weight: 500;
-    color: #ddd;
-    flex: 1;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-size: 13px; font-weight: 500; color: #222;
+    flex: 1; white-space: nowrap;
+    overflow: hidden; text-overflow: ellipsis;
 }
 .video-views {
     font-family: 'Space Grotesk', sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    color: #999;
-    flex-shrink: 0;
+    font-size: 13px; font-weight: 600; color: #666; flex-shrink: 0;
 }
 
-/* Section heading */
+/* ── Section heading ── */
 .section-heading {
     font-family: 'Space Grotesk', sans-serif;
-    font-size: 14px;
-    font-weight: 700;
-    color: #888;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin: 28px 0 14px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid #1e1e1e;
+    font-size: 14px; font-weight: 700; color: #555;
+    text-transform: uppercase; letter-spacing: 1px;
+    margin: 28px 0 14px; padding-bottom: 8px;
+    border-bottom: 2px solid #e8eaf0;
 }
 
-/* Progress */
+/* ── Progress ── */
 .stProgress > div > div > div {
     background: linear-gradient(90deg, #FF0000, #FF6B6B) !important;
     border-radius: 4px;
 }
 
-/* Buttons */
+/* ── Buttons ── */
 .stButton > button {
-    background: #FF0000 !important;
-    color: white !important;
-    border: none !important;
-    border-radius: 8px !important;
-    font-weight: 600 !important;
-    font-size: 14px !important;
-    padding: 10px 24px !important;
-    transition: opacity 0.15s !important;
+    background: #FF0000 !important; color: white !important;
+    border: none !important; border-radius: 8px !important;
+    font-weight: 600 !important; font-size: 14px !important;
+    padding: 10px 24px !important; transition: opacity 0.15s !important;
 }
 .stButton > button:hover { opacity: 0.85 !important; }
 
-/* Download button */
+/* ── Download button ── */
 .stDownloadButton > button {
-    background: #1e1e1e !important;
-    color: #e8e8e8 !important;
-    border: 1px solid #333 !important;
-    border-radius: 8px !important;
+    background: #fff !important; color: #333 !important;
+    border: 1px solid #dde !important; border-radius: 8px !important;
     font-weight: 500 !important;
 }
 .stDownloadButton > button:hover {
-    border-color: #FF0000 !important;
-    color: #FF4444 !important;
+    border-color: #FF0000 !important; color: #FF0000 !important;
 }
 
-/* Inputs */
+/* ── Inputs (main area) ── */
 .stTextInput > div > div > input,
 .stNumberInput > div > div > input {
-    background: #1a1a1a !important;
-    border-color: #2a2a2a !important;
-    color: #e8e8e8 !important;
+    background: #fff !important;
+    border-color: #dde !important; color: #111 !important;
     border-radius: 8px !important;
 }
-.stCheckbox > label > span { color: #ccc !important; }
 
-/* Expander */
-.streamlit-expanderHeader {
-    background: #181818 !important;
-    border: 1px solid #252525 !important;
-    border-radius: 8px !important;
-    color: #ccc !important;
+/* ── Tabs ── */
+.stTabs [data-baseweb="tab"] {
+    font-weight: 600 !important; color: #666 !important;
 }
+.stTabs [aria-selected="true"] { color: #FF0000 !important; }
 
-/* Dataframe */
-.stDataFrame { border-radius: 10px; overflow: hidden; }
-
-/* Alert */
-.stAlert { border-radius: 8px !important; }
+/* ── Alert ── */
+.stAlert { border-radius: 10px !important; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -548,78 +538,138 @@ def render_header():
 
 
 def render_setup_page():
-    """หน้า setup — กรอก API Key ก่อนเข้าแอป"""
+    """หน้า Login — Username + Password + API Key"""
+
+    # ── Credentials (ตั้งค่าใน .streamlit/secrets.toml หรือ Streamlit Cloud Secrets)
+    # secrets.toml:
+    #   APP_USERNAME = "admin"
+    #   APP_PASSWORD = "yourpassword"
+    import streamlit as st
+    try:
+        valid_user = st.secrets["APP_USERNAME"]
+        valid_pass = st.secrets["APP_PASSWORD"]
+    except Exception:
+        valid_user = "admin"
+        valid_pass = "1234"
+
+    # ── Full-page gradient background ────────────────────────────────────────
     st.markdown("""
-    <div style="max-width:480px; margin:60px auto 0; padding:0 16px;">
-        <div style="text-align:center; margin-bottom:40px;">
-            <div style="display:inline-flex; align-items:center; justify-content:center;
-                        background:#FF0000; border-radius:16px;
-                        width:64px; height:64px; font-size:32px; margin-bottom:16px;">▶</div>
-            <p style="font-family:'Space Grotesk',sans-serif; font-size:26px;
-               font-weight:700; color:#fff; margin:0 0 8px;">YouTube Analytics</p>
-            <p style="font-size:14px; color:#555; margin:0;">
-                ใส่ YouTube Data API v3 Key เพื่อเริ่มใช้งาน
-            </p>
+    <style>
+    .stApp { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 55%, #0f3460 100%) !important; }
+    [data-testid="stSidebar"] { display: none !important; }
+    header[data-testid="stHeader"] { background: transparent !important; }
+    /* Force Streamlit columns to center */
+    .block-container { padding-top: 0 !important; }
+    </style>
+    """, unsafe_allow_html=True)
+
+    # ── Centered card layout ──────────────────────────────────────────────────
+    st.markdown("""
+    <div style="display:flex; justify-content:center; padding-top:60px; padding-bottom:40px;">
+      <div style="background:#ffffff; border-radius:24px; padding:52px 48px 44px;
+                  width:420px; box-shadow:0 32px 80px rgba(0,0,0,0.45);">
+
+        <!-- Logo -->
+        <div style="display:flex; justify-content:center; margin-bottom:20px;">
+          <div style="background:#FF0000; border-radius:18px; width:68px; height:68px;
+               display:flex; align-items:center; justify-content:center;
+               font-size:32px; box-shadow:0 8px 24px rgba(255,0,0,0.35);">▶</div>
         </div>
+
+        <!-- Title -->
+        <p style="font-family:'Space Grotesk',sans-serif; font-size:28px; font-weight:700;
+           color:#111; text-align:center; margin:0 0 6px;">YouTube Analytics</p>
+        <p style="font-size:14px; color:#888; text-align:center; margin:0 0 36px; line-height:1.5;">
+          เข้าสู่ระบบเพื่อเริ่มใช้งาน
+        </p>
+
+        <!-- Section divider: Account -->
+        <p style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px;
+           color:#bbb; margin:0 0 16px; text-align:center;">
+          ── บัญชีผู้ใช้ ──
+        </p>
+      </div>
     </div>
     """, unsafe_allow_html=True)
 
-    col_l, col_c, col_r = st.columns([1, 2, 1])
-    with col_c:
+    # ── Form fields (must use Streamlit native for interactivity) ────────────
+    _, col, _ = st.columns([1, 8, 1])
+    with col:
+        # Card wrapper (just visual padding)
+        st.markdown("""
+        <div style="background:#fff; border-radius:0 0 24px 24px;
+             margin-top:-48px; padding:0 48px 0; position:relative; z-index:1;">
+        </div>
+        """, unsafe_allow_html=True)
+
+        username = st.text_input("👤  Username", placeholder="กรอก Username")
+        password = st.text_input("🔒  Password", type="password", placeholder="กรอก Password")
+
+        st.markdown("""<hr style="border:none;border-top:1px solid #eee;margin:20px 0 16px;">
+        <p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;
+           color:#bbb;text-align:center;margin:0 0 14px;">── YouTube API Key ──</p>
+        """, unsafe_allow_html=True)
+
         api_key = st.text_input(
-            "🔑 YouTube Data API v3 Key",
+            "🔑  YouTube Data API v3 Key",
             type="password",
             placeholder="AIzaSy...",
-            label_visibility="visible",
         )
-
         st.markdown("""
-        <p style="font-size:12px; color:#444; margin:-8px 0 16px; line-height:1.7;">
+        <p style="font-size:12px; color:#aaa; margin:-6px 0 20px; line-height:1.6;">
         ยังไม่มี Key?
         <a href="https://console.cloud.google.com/apis/credentials"
-           target="_blank" style="color:#FF4444;">
-           สร้างได้ที่ Google Cloud Console →
-        </a><br>
-        เปิดใช้ <strong style="color:#666">YouTube Data API v3</strong> ก่อนนะครับ
+           target="_blank" style="color:#FF0000; font-weight:600;">
+          Google Cloud Console →</a>
         </p>
         """, unsafe_allow_html=True)
 
-        confirm = st.button("เข้าใช้งาน →", use_container_width=True)
-
-        if confirm:
-            if not api_key or not api_key.startswith("AIza"):
-                st.error("❌ รูปแบบ API Key ไม่ถูกต้อง (ควรขึ้นต้นด้วย AIza...)")
-            else:
-                # ทดสอบ key จริงด้วย API call เบาๆ
-                with st.spinner("กำลังตรวจสอบ API Key..."):
-                    try:
-                        yt = create_youtube_client(api_key)
-                        yt.videos().list(part="snippet", id="dQw4w9WgXcQ").execute()
-                        st.session_state.api_key = api_key
-                        st.session_state.setup_done = True
-                        st.rerun()
-                    except HttpError as e:
-                        if "400" in str(e) or "invalid" in str(e).lower():
-                            st.error("❌ API Key ไม่ถูกต้อง กรุณาตรวจสอบอีกครั้ง")
-                        elif "403" in str(e):
-                            st.error("❌ API Key ถูกต้องแต่ยังไม่ได้เปิดใช้ YouTube Data API v3")
-                        else:
-                            st.error(f"❌ ไม่สามารถเชื่อมต่อได้: {e}")
-                    except Exception as e:
-                        st.error(f"❌ เกิดข้อผิดพลาด: {e}")
+        login_btn = st.button("เข้าสู่ระบบ →", use_container_width=True)
 
         st.markdown("""
-        <div style="margin-top:32px; background:#141414; border:1px solid #222;
-             border-radius:10px; padding:16px 18px;">
-            <p style="font-size:12px; color:#555; margin:0 0 8px; font-weight:600;
-               text-transform:uppercase; letter-spacing:0.5px;">🔒 ความปลอดภัย</p>
-            <p style="font-size:12px; color:#444; margin:0; line-height:1.8;">
-            • API Key ถูกเก็บเฉพาะใน session นี้เท่านั้น<br>
-            • ไม่มีการบันทึกหรือส่งข้อมูลออกไปที่อื่น<br>
-            • ปิดหน้าต่าง = ลบ Key ทันที
-            </p>
+        <div style="background:#f8f9fc; border:1px solid #eee; border-radius:10px;
+             padding:14px 16px; margin-top:20px;">
+          <p style="font-size:11px; color:#bbb; margin:0; line-height:1.9; text-align:center;">
+            🔒 ข้อมูลทั้งหมดเก็บเฉพาะใน session นี้เท่านั้น<br>
+            ปิดหน้าต่าง = ล้างข้อมูลทันที
+          </p>
         </div>
         """, unsafe_allow_html=True)
+
+    # ── Validation ────────────────────────────────────────────────────────────
+    if login_btn:
+        errors = []
+        if not username:
+            errors.append("กรุณากรอก Username")
+        if not password:
+            errors.append("กรุณากรอก Password")
+        if not api_key:
+            errors.append("กรุณากรอก API Key")
+        elif not api_key.startswith("AIza"):
+            errors.append("API Key ไม่ถูกต้อง (ควรขึ้นต้นด้วย AIza...)")
+
+        if errors:
+            for e in errors:
+                st.error(f"❌ {e}")
+        elif username != valid_user or password != valid_pass:
+            st.error("❌ Username หรือ Password ไม่ถูกต้อง")
+        else:
+            with st.spinner("กำลังตรวจสอบ API Key..."):
+                try:
+                    yt = create_youtube_client(api_key)
+                    yt.videos().list(part="snippet", id="dQw4w9WgXcQ").execute()
+                    st.session_state.api_key = api_key
+                    st.session_state.setup_done = True
+                    st.rerun()
+                except HttpError as e:
+                    if "400" in str(e) or "invalid" in str(e).lower():
+                        st.error("❌ API Key ไม่ถูกต้อง กรุณาตรวจสอบอีกครั้ง")
+                    elif "403" in str(e):
+                        st.error("❌ API Key ถูกต้องแต่ยังไม่ได้เปิดใช้ YouTube Data API v3")
+                    else:
+                        st.error(f"❌ ไม่สามารถเชื่อมต่อได้: {e}")
+                except Exception as e:
+                    st.error(f"❌ เกิดข้อผิดพลาด: {e}")
 
 
 def render_sidebar() -> dict:
