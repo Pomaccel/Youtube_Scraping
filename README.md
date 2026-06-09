@@ -1,4 +1,4 @@
-# YouTube Scraping & Analytics Dashboard 🚀
+# YouTube Scraping & Mini Analytics Dashboard 🚀
 
 An interactive, web-based dashboard built with **Streamlit** that utilizes the official **Google YouTube Data API v3** to scrape, analyze, and export YouTube data (videos, channels, and comments) in real-time.
 
@@ -36,7 +36,7 @@ Clone the repository and install the dependencies:
 
 ```bash
 # Clone the repository
-git clone [https://github.com/YOUR_USERNAME/Youtube_Scraping.git](https://github.com/YOUR_USERNAME/Youtube_Scraping.git)
+git clone [https://github.com/Pomaccel/Youtube_Scraping.git](https://github.com/Pomaccel/Youtube_Scraping.git)
 
 # Navigate into the project directory
 cd Youtube_Scraping
