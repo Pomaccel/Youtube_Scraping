@@ -540,11 +540,7 @@ def render_header():
 def render_setup_page():
     """หน้า Login — Username + Password + API Key"""
 
-    # ── Credentials (ตั้งค่าใน .streamlit/secrets.toml หรือ Streamlit Cloud Secrets)
-    # secrets.toml:
-    #   APP_USERNAME = "admin"
-    #   APP_PASSWORD = "yourpassword"
-    import streamlit as st
+    # ── Credentials ──────────────────────────────────────────────────────────
     try:
         valid_user = st.secrets["APP_USERNAME"]
         valid_pass = st.secrets["APP_PASSWORD"]
@@ -552,89 +548,135 @@ def render_setup_page():
         valid_user = "admin"
         valid_pass = "1234"
 
-    # ── Full-page gradient background ────────────────────────────────────────
+    # ── Page-level CSS: gradient bg, hide sidebar, style the login card ──────
     st.markdown("""
     <style>
-    .stApp { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 55%, #0f3460 100%) !important; }
-    [data-testid="stSidebar"] { display: none !important; }
-    header[data-testid="stHeader"] { background: transparent !important; }
-    /* Force Streamlit columns to center */
-    .block-container { padding-top: 0 !important; }
+    /* Full-page dark gradient */
+    .stApp {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 55%, #0f3460 100%) !important;
+        min-height: 100vh;
+    }
+    [data-testid="stSidebar"]      { display: none !important; }
+    header[data-testid="stHeader"] { background: transparent !important; box-shadow: none !important; }
+    .block-container               { padding-top: 48px !important; max-width: 480px !important; margin: 0 auto !important; }
+
+    /* White card wrapping everything */
+    div[data-testid="stVerticalBlock"] > div:has(> .login-card-inner) {
+        background: #ffffff;
+        border-radius: 24px;
+        padding: 0;
+        box-shadow: 0 32px 80px rgba(0,0,0,0.45);
+        overflow: hidden;
+    }
+    /* Card inner padding container */
+    .login-card-inner { padding: 48px 44px 8px; }
+
+    /* Input labels */
+    .login-form label { color: #333 !important; font-weight: 600 !important; font-size: 14px !important; }
+    .login-form input {
+        background: #f7f8fc !important;
+        border: 1.5px solid #e0e3ea !important;
+        border-radius: 10px !important;
+        color: #111 !important;
+        font-size: 15px !important;
+        padding: 10px 14px !important;
+    }
+    .login-form input:focus { border-color: #FF0000 !important; box-shadow: 0 0 0 3px rgba(255,0,0,0.1) !important; }
+
+    /* Login button override */
+    .login-form .stButton > button {
+        background: #FF0000 !important;
+        color: #fff !important;
+        font-size: 16px !important;
+        font-weight: 700 !important;
+        border-radius: 12px !important;
+        height: 52px !important;
+        margin-top: 8px !important;
+        letter-spacing: 0.3px !important;
+        box-shadow: 0 6px 20px rgba(255,0,0,0.30) !important;
+        transition: opacity 0.15s !important;
+    }
+    .login-form .stButton > button:hover { opacity: 0.88 !important; }
+
+    /* Divider label */
+    .login-divider-label {
+        display: flex; align-items: center; gap: 12px;
+        margin: 22px 0 18px;
+    }
+    .login-divider-label span {
+        font-size: 11px; font-weight: 700; text-transform: uppercase;
+        letter-spacing: 1px; color: #bbb; white-space: nowrap;
+    }
+    .login-divider-label::before,
+    .login-divider-label::after {
+        content: ""; flex: 1; height: 1px; background: #eee;
+    }
+
+    /* Security note */
+    .login-security {
+        background: #f8f9fc; border-top: 1px solid #eee;
+        padding: 16px 44px; margin-top: 12px;
+        text-align: center;
+    }
+    .login-security p { font-size: 12px; color: #bbb; margin: 0; line-height: 1.8; }
     </style>
     """, unsafe_allow_html=True)
 
-    # ── Centered card layout ──────────────────────────────────────────────────
+    # ── Logo + Title (pure HTML, no inputs) ──────────────────────────────────
     st.markdown("""
-    <div style="display:flex; justify-content:center; padding-top:60px; padding-bottom:40px;">
-      <div style="background:#ffffff; border-radius:24px; padding:52px 48px 44px;
-                  width:420px; box-shadow:0 32px 80px rgba(0,0,0,0.45);">
-
-        <!-- Logo -->
-        <div style="display:flex; justify-content:center; margin-bottom:20px;">
-          <div style="background:#FF0000; border-radius:18px; width:68px; height:68px;
-               display:flex; align-items:center; justify-content:center;
-               font-size:32px; box-shadow:0 8px 24px rgba(255,0,0,0.35);">▶</div>
-        </div>
-
-        <!-- Title -->
-        <p style="font-family:'Space Grotesk',sans-serif; font-size:28px; font-weight:700;
-           color:#111; text-align:center; margin:0 0 6px;">YouTube Analytics</p>
-        <p style="font-size:14px; color:#888; text-align:center; margin:0 0 36px; line-height:1.5;">
+    <div class="login-card-inner">
+      <div style="text-align:center; margin-bottom:32px;">
+        <div style="display:inline-flex; align-items:center; justify-content:center;
+             background:#FF0000; border-radius:18px; width:68px; height:68px;
+             font-size:32px; box-shadow:0 8px 24px rgba(255,0,0,0.30);
+             margin-bottom:18px;">▶</div>
+        <p style="font-family:'Space Grotesk',sans-serif; font-size:28px;
+           font-weight:700; color:#111; margin:0 0 6px;">YouTube Analytics</p>
+        <p style="font-size:14px; color:#888; margin:0; line-height:1.5;">
           เข้าสู่ระบบเพื่อเริ่มใช้งาน
         </p>
-
-        <!-- Section divider: Account -->
-        <p style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px;
-           color:#bbb; margin:0 0 16px; text-align:center;">
-          ── บัญชีผู้ใช้ ──
-        </p>
       </div>
+      <div class="login-divider-label"><span>บัญชีผู้ใช้</span></div>
     </div>
     """, unsafe_allow_html=True)
 
-    # ── Form fields (must use Streamlit native for interactivity) ────────────
-    _, col, _ = st.columns([1, 8, 1])
-    with col:
-        # Card wrapper (just visual padding)
+    # ── Native Streamlit inputs inside .login-form class ─────────────────────
+    with st.container():
+        st.markdown('<div class="login-form">', unsafe_allow_html=True)
+
+        username = st.text_input("👤 Username", placeholder="กรอก Username", key="login_user")
+        password = st.text_input("🔒 Password", type="password", placeholder="กรอก Password", key="login_pass")
+
         st.markdown("""
-        <div style="background:#fff; border-radius:0 0 24px 24px;
-             margin-top:-48px; padding:0 48px 0; position:relative; z-index:1;">
-        </div>
-        """, unsafe_allow_html=True)
-
-        username = st.text_input("👤  Username", placeholder="กรอก Username")
-        password = st.text_input("🔒  Password", type="password", placeholder="กรอก Password")
-
-        st.markdown("""<hr style="border:none;border-top:1px solid #eee;margin:20px 0 16px;">
-        <p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;
-           color:#bbb;text-align:center;margin:0 0 14px;">── YouTube API Key ──</p>
+        <div class="login-divider-label"><span>YouTube API Key</span></div>
         """, unsafe_allow_html=True)
 
         api_key = st.text_input(
-            "🔑  YouTube Data API v3 Key",
+            "🔑 YouTube Data API v3 Key",
             type="password",
             placeholder="AIzaSy...",
+            key="login_apikey",
         )
         st.markdown("""
-        <p style="font-size:12px; color:#aaa; margin:-6px 0 20px; line-height:1.6;">
-        ยังไม่มี Key?
-        <a href="https://console.cloud.google.com/apis/credentials"
-           target="_blank" style="color:#FF0000; font-weight:600;">
-          Google Cloud Console →</a>
+        <p style="font-size:12px; color:#aaa; margin:-4px 0 4px; line-height:1.6;">
+          ยังไม่มี Key?
+          <a href="https://console.cloud.google.com/apis/credentials"
+             target="_blank" style="color:#FF0000; font-weight:600;">
+            Google Cloud Console →
+          </a>
         </p>
         """, unsafe_allow_html=True)
 
-        login_btn = st.button("เข้าสู่ระบบ →", use_container_width=True)
+        login_btn = st.button("เข้าสู่ระบบ →", use_container_width=True, key="login_btn")
 
-        st.markdown("""
-        <div style="background:#f8f9fc; border:1px solid #eee; border-radius:10px;
-             padding:14px 16px; margin-top:20px;">
-          <p style="font-size:11px; color:#bbb; margin:0; line-height:1.9; text-align:center;">
-            🔒 ข้อมูลทั้งหมดเก็บเฉพาะใน session นี้เท่านั้น<br>
-            ปิดหน้าต่าง = ล้างข้อมูลทันที
-          </p>
-        </div>
-        """, unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
+
+    # ── Security note footer ──────────────────────────────────────────────────
+    st.markdown("""
+    <div class="login-security">
+      <p>🔒 ข้อมูลทั้งหมดเก็บเฉพาะใน session นี้เท่านั้น &nbsp;·&nbsp; ปิดหน้าต่าง = ล้างข้อมูลทันที</p>
+    </div>
+    """, unsafe_allow_html=True)
 
     # ── Validation ────────────────────────────────────────────────────────────
     if login_btn:
@@ -670,6 +712,7 @@ def render_setup_page():
                         st.error(f"❌ ไม่สามารถเชื่อมต่อได้: {e}")
                 except Exception as e:
                     st.error(f"❌ เกิดข้อผิดพลาด: {e}")
+
 
 
 def render_sidebar() -> dict:
